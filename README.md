@@ -36,3 +36,37 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+
+## How to deploy to cf
+1. edit app.t.ts 
+``` typescript
+interface Platform {
+    env: {
+    // COUNTER: DurableObjectNamespace;
+    YOUR_KV_NAME: KVNamespace
+    };
+    context: {
+    waitUntil(promise: Promise<any>): void;
+    };
+    caches: CacheStorage & { default: Cache }
+}
+```
+
+2. xxx/+server.ts
+``` ts
+export const POST: RequestHandler = async ({ request , platform }) => {
+
+    const obj = await request.json()
+    const keyName = obj.keyName;
+    const res = await platform?.env.YOUR_KV_NAME.delete(keyName) 
+    
+    return json({ success: true })
+
+}
+
+```
+3. binding
+> upload your project and delpoy it (you may need to edit env var)
+> go to "workers-and-pages" => view details => function => binding 
+> choose a kv (the customize name should be same with YOUR_KV_NAME)
+> see note, reploy!

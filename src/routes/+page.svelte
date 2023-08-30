@@ -17,6 +17,10 @@
                 value: aValue
             })
         })
+
+        if(res.status === 200) {
+            inf = "设置成功";
+        }
         
     }
 
@@ -31,6 +35,11 @@
             })
         })
 
+        if(res.status === 200) {
+            inf = "查询成功";
+        }
+        const resJson = await res.json();
+        aResult = resJson.result
 
     }
 
@@ -45,7 +54,11 @@
             })
         })
 
-
+        if(res.status === 200 ) {
+            inf = "删除成功";
+        } else {
+            inf = "删除失败";
+        }
     }
 
 
@@ -66,3 +79,5 @@
     key: <input type="text" bind:value={aKey} />
     <button type="button" on:click={async()=>{await delKV()} }> 删除</button>
  </div>
+ 
+ <div>info: {inf}</div>
